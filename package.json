@@ -9,12 +9,12 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "firebase": "^9.7.0",
     "materialize-css": "^1.0.0-rc.2",
     "vee-validate": "^4.5.11",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
-
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.15",

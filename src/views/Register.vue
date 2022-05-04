@@ -1,5 +1,5 @@
 <template>
-  <Form class="card auth-card" v-on:submit="onSubmit">
+  <Form class="card auth-card">
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
 
@@ -28,7 +28,10 @@
           v-model.trim="passwordSet.value"
         />
         <label for="password">Пароль</label>
-        <button class="btn waves-effect waves-light" v-on:click="typePassword">
+        <button
+          class="btn waves-effect waves-light"
+          v-on:click.prevent="typePassword"
+        >
           Показать
         </button>
         <small v-if="passwordSet.value.length === 0"></small>
@@ -49,22 +52,25 @@
         />
         <label for="name">Имя</label>
         <small v-if="nameSet.value.length === 0"></small>
-        <small
-          v-else-if="nameSet.ready === false"
-          class="helper-text invalid"
+        <small v-else-if="nameSet.ready === false" class="helper-text invalid"
           ><ErrorMessage name="name"
         /></small>
       </div>
       <p>
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" v-model="agreements"/>
           <span>С правилами согласен</span>
         </label>
       </p>
     </div>
     <div class="card-action">
       <div>
-        <button class="btn waves-effect waves-light auth-submit" type="submit" v-bind:disabled="isButtonDisabled"> 
+        <button
+          class="btn waves-effect waves-light auth-submit"
+          type="submit"
+          v-bind:disabled="isButtonDisabled"
+          v-on:click.prevent="onSubmit"
+        >
           Зарегистрироваться
           <i class="material-icons right">send</i>
         </button>
@@ -95,7 +101,8 @@ export default {
       nameSet: {
         value: "",
         ready: false,
-      },
+      },   
+      agreements: false,
     };
   },
   components: {
@@ -109,12 +116,14 @@ export default {
       const formData = {
         email: this.emailSet.value,
         password: this.passwordSet.value,
+        name: this.nameSet.value,
       };
       this.$router.push("/");
       console.log(formData);
     },
     isRequiredEmail(value) {
-      const reg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const reg =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (reg.test(value) === true) {
         this.emailSet.ready = true;
         return true;
@@ -148,10 +157,66 @@ export default {
         this.passwordSet.typeOfPassword = "text";
       else this.passwordSet.typeOfPassword = "password";
     },
+    async requestItems() {
+      const response = await fetch("http://localhost:7007/items");
+      const data = await response.json();
+      console.log(data);
+    },
+    async requestItemById(id) {
+      try {
+        const response = await fetch(`http://localhost:7007/items/${id}`);
+        if(response.status >= 400) return
+        console.log(response);
+        const data = await response.json();
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async requestItemCreate() {
+      const data = new FormData();
+      data.append("name", "Maksim");
+      const response = await fetch(`http://localhost:7007/items/`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json, application/xml, text/plain, text/html, .",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "Maxim",
+          data: 28,
+        }),
+      });
+      console.log(response);
+    },
+    async requestItemUpdate() {
+      const data = new FormData();
+      data.append("name", "Maksim");
+      const response = await fetch(`http://localhost:7007/items/Allah`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json, application/xml, text/plain, text/html, .",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: "name",
+          data: 1488,
+        }),
+      });
+      console.log(response);
+    },
+    async requestItemDelete(id) {
+      const data = new FormData();
+      data.append("name", "Maksim");
+      const response = await fetch(`http://localhost:7007/items/${id}`, {
+        method: "DELETE",
+      });
+      console.log(response);
+    },
   },
   computed: {
     isButtonDisabled() {
-      if (this.emailSet.ready === true && this.passwordSet.ready === true)
+      if (this.emailSet.ready === true && this.passwordSet.ready === true && this.nameSet.value.length > 1 && this.agreements === true)
         return false;
       return true;
     },

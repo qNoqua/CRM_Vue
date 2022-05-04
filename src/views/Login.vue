@@ -1,5 +1,5 @@
 <template>
-  <Form class="card auth-card" v-on:submit="onSubmit">
+  <Form class="card auth-card">
     <div class="card-content">
       <span class="card-title">Домашняя бухгалтерия</span>
 
@@ -13,7 +13,7 @@
           v-model.trim="emailSet.value"
         />
         <label for="email">Email</label>
-        <small v-if="emailSet.value.length === 0"></small>
+        <small v-if="emailSet.value.length === 0" class="helper-text validate"></small>
         <small v-else-if="emailSet.ready === false" class="helper-text invalid"><ErrorMessage name="email"/></small>
       </div>
 
@@ -27,7 +27,7 @@
           v-model.trim="passwordSet.value"
         />
         <label for="password">Пароль</label>
-        <button class="btn waves-effect waves-light" v-on:click="typePassword">
+        <button class="btn waves-effect waves-light" v-on:click.prevent="typePassword">
           Показать
         </button>
         <small v-if="passwordSet.value.length === 0"></small>
@@ -42,6 +42,7 @@
           v-bind:disabled="isButtonDisabled"
           class="btn waves-effect waves-light auth-submit"
           type="submit"
+          v-on:click.prevent="onSubmit"
         >
           Войти
           <i class="material-icons right">send</i>
@@ -58,6 +59,8 @@
 
 <script>
 import { Field, Form, ErrorMessage } from "vee-validate";
+import messages from '@/utils/messages';
+
 export default {
   name: "login",
   setup() {},
@@ -79,7 +82,11 @@ export default {
     Form,
     ErrorMessage,
   },
-  validatons: {},
+    mounted () {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message])
+    } 
+  },
   methods: {
     onSubmit() {
       const formData = {
@@ -116,6 +123,7 @@ export default {
       else this.passwordSet.typeOfPassword = "password";
     },
   },
+
   computed: {
     isButtonDisabled() {
       if (this.emailSet.ready === true && this.passwordSet.ready === true)

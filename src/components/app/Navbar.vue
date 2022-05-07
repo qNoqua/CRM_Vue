@@ -53,7 +53,7 @@ export default {
       this.$emit('clickBurger')
     },
     logout() {
-      console.log('logout')
+      localStorage.setItem('isAuthorized', false)
       this.$router.push('/login?message=logout')
     },
     timeCounter() {

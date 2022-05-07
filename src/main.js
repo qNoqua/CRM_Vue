@@ -5,29 +5,100 @@ import store from './store'
 import messagePlugin from './utils/message.plugin'
 import 'materialize-css/dist/js/materialize.min.js'
 
-import { initializeApp } from 'firebase/app'
-import { getAuth } from "firebase/auth";
-// import { getDatabase } from "firebase/database";
+const app = createApp(App).use(router).use(store).use(messagePlugin)
+router.app = app
+app.mount('#app')
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDHnBlqSvxrx_ZehBLObRnUnvB89V9DGlU",
-    authDomain: "crm-project-noqua.firebaseapp.com",
-    projectId: "crm-project-noqua",
-    storageBucket: "crm-project-noqua.appspot.com",
-    messagingSenderId: "634657151325",
-    appId: "1:634657151325:web:d4d5afa7c5e084dd7c30b4",
-    measurementId: "G-WSLGDCBYM6"
-  };
 
-const firebase = initializeApp(firebaseConfig);
-const auth = getAuth(firebase)
-// const database = getDatabase(firebase);
 
-let app 
 
-auth.onAuthStateChanged(() => {
-    if (!app) {
-        app = createApp(App).use(store).use(router).use(messagePlugin).mount('#app')
-    }
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // async requestItems() {
+    //   const response = await fetch("http://localhost:7007/items");
+    //   const data = await response.json();
+    //   console.log(data);
+    // },
+    // async requestItemById(id) {
+    //   try {
+    //     const response = await fetch(`http://localhost:7007/items/${id}`);
+    //     if(response.status >= 400) return
+    //     console.log(response);
+    //     const data = await response.json();
+    //     console.log(data);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // },
+    // async requestItemCreate() {
+    //   const data = new FormData();
+    //   data.append("name", "Maksim");
+    //   const response = await fetch(`http://localhost:7007/items/`, {
+    //     method: "POST",
+    //     headers: {
+    //       Accept: "application/json, application/xml, text/plain, text/html, .",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       name: "Maxim",
+    //       data: 28,
+    //     }),
+    //   });
+    //   console.log(response);
+    // },
+    // async requestItemUpdate() {
+    //   const data = new FormData();
+    //   data.append("name", "Maksim");
+    //   const response = await fetch(`http://localhost:7007/items/Allah`, {
+    //     method: "PUT",
+    //     headers: {
+    //       Accept: "application/json, application/xml, text/plain, text/html, .",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       name: "name",
+    //       data: 1488,
+    //     }),
+    //   });
+    //   console.log(response);
+    // },
+    // async requestItemDelete(id) {
+    //   const data = new FormData();
+    //   data.append("name", "Maksim");
+    //   const response = await fetch(`http://localhost:7007/items/${id}`, {
+    //     method: "DELETE",
+    //   });
+    //   console.log(response);
+    // },

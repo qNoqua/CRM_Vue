@@ -42,7 +42,7 @@
           v-bind:disabled="isButtonDisabled"
           class="btn waves-effect waves-light auth-submit"
           type="submit"
-          v-on:click.prevent="onSubmit"
+          v-on:click.prevent="singIn"
         >
           Войти
           <i class="material-icons right">send</i>
@@ -60,10 +60,11 @@
 <script>
 import { Field, Form, ErrorMessage } from "vee-validate";
 import messages from '@/utils/messages';
+import ValidateMethods from '@/mixins/validateMethods'
 
 export default {
   name: "login",
-  setup() {},
+  mixins: [ValidateMethods],
   data() {
     return {
       emailSet: {
@@ -96,34 +97,30 @@ export default {
       this.$router.push("/");
       console.log(formData);
     },
-    isRequiredEmail(value) {
-      const reg =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (reg.test(value) === true) {
-        this.emailSet.ready = true;
-        return true;
-      } else {
-        this.emailSet.ready = false;
-        return "Неверный email";
-      }
-    },
-    isRequiredPassword(value) {
-      const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-      if (reg.test(value) === true) {
-        this.passwordSet.ready = true;
-        return true;
-      } else {
-        this.passwordSet.ready = false;
-        return "Пароль должен содержать не менее 8 смволов, одной сточной, одной заглавной букв и одной цифры";
-      }
-    },
-    typePassword() {
-      if (this.passwordSet.typeOfPassword === "password")
-        this.passwordSet.typeOfPassword = "text";
-      else this.passwordSet.typeOfPassword = "password";
-    },
+    async singIn() {
+      try {
+        const response = await fetch("http://localhost:7007/auth/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json, application/xml, text/plain, text/html, .",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: this.emailSet.value,
+          password: this.passwordSet.value,
+        }),
+        
+      });
+      if (response.status === 201)  {
+      localStorage.setItem('isAuthorized', true)
+      this.$router.push('/')
+    }
+    }
+    catch(error) {
+     console.error(error)   
+    }
+    } 
   },
-
   computed: {
     isButtonDisabled() {
       if (this.emailSet.ready === true && this.passwordSet.ready === true)

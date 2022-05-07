@@ -58,7 +58,7 @@
       </div>
       <p>
         <label>
-          <input type="checkbox" v-model="agreements"/>
+          <input type="checkbox" v-model="agreements" />
           <span>С правилами согласен</span>
         </label>
       </p>
@@ -69,7 +69,7 @@
           class="btn waves-effect waves-light auth-submit"
           type="submit"
           v-bind:disabled="isButtonDisabled"
-          v-on:click.prevent="onSubmit"
+          v-on:click.prevent="singUp"
         >
           Зарегистрироваться
           <i class="material-icons right">send</i>
@@ -84,9 +84,11 @@
 </template>
 <script>
 import { Field, Form, ErrorMessage } from "vee-validate";
+import messages from "@/utils/messages";
+import ValidateMethods from "@/mixins/validateMethods";
 export default {
   name: "login",
-  setup() {},
+  mixins: [ValidateMethods],
   data() {
     return {
       emailSet: {
@@ -101,7 +103,7 @@ export default {
       nameSet: {
         value: "",
         ready: false,
-      },   
+      },
       agreements: false,
     };
   },
@@ -110,113 +112,45 @@ export default {
     Form,
     ErrorMessage,
   },
-  validatons: {},
+  mounted() {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message]);
+    }
+  },
   methods: {
-    onSubmit() {
-      const formData = {
-        email: this.emailSet.value,
-        password: this.passwordSet.value,
-        name: this.nameSet.value,
-      };
-      this.$router.push("/");
-      console.log(formData);
-    },
-    isRequiredEmail(value) {
-      const reg =
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (reg.test(value) === true) {
-        this.emailSet.ready = true;
-        return true;
-      } else {
-        this.emailSet.ready = false;
-        return "Неверный email";
-      }
-    },
-    isRequiredPassword(value) {
-      const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-      if (reg.test(value) === true) {
-        this.passwordSet.ready = true;
-        return true;
-      } else {
-        this.passwordSet.ready = false;
-        return "Пароль должен содержать не менее 8 смволов, одной сточной, одной заглавной букв и одной цифры";
-      }
-    },
-    isRequiredName(value) {
-      const reg = /^[а-яА-Я ]+$/;
-      if (reg.test(value) === true) {
-        this.nameSet.ready = true;
-        return true;
-      } else {
-        this.nameSet.ready = false;
-        return "Недопустимое имя";
-      }
-    },
-    typePassword() {
-      if (this.passwordSet.typeOfPassword === "password")
-        this.passwordSet.typeOfPassword = "text";
-      else this.passwordSet.typeOfPassword = "password";
-    },
-    async requestItems() {
-      const response = await fetch("http://localhost:7007/items");
-      const data = await response.json();
-      console.log(data);
-    },
-    async requestItemById(id) {
+    async singUp() {
       try {
-        const response = await fetch(`http://localhost:7007/items/${id}`);
-        if(response.status >= 400) return
-        console.log(response);
-        const data = await response.json();
-        console.log(data);
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async requestItemCreate() {
-      const data = new FormData();
-      data.append("name", "Maksim");
-      const response = await fetch(`http://localhost:7007/items/`, {
+        const response = await fetch("http://localhost:7007/auth/", {
         method: "POST",
         headers: {
           Accept: "application/json, application/xml, text/plain, text/html, .",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: "Maxim",
-          data: 28,
+          email: this.emailSet.value,
+          password: this.passwordSet.value,
+          name: this.nameSet.value,
         }),
+        
       });
-      console.log(response);
-    },
-    async requestItemUpdate() {
-      const data = new FormData();
-      data.append("name", "Maksim");
-      const response = await fetch(`http://localhost:7007/items/Allah`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json, application/xml, text/plain, text/html, .",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "name",
-          data: 1488,
-        }),
-      });
-      console.log(response);
-    },
-    async requestItemDelete(id) {
-      const data = new FormData();
-      data.append("name", "Maksim");
-      const response = await fetch(`http://localhost:7007/items/${id}`, {
-        method: "DELETE",
-      });
-      console.log(response);
+      if (response.status === 201)  {
+      localStorage.setItem('isAuthorized', true)
+      this.$router.push('/')
+    }
+    }
+    catch(error) {
+     console.error(error)   
+    }
     },
   },
   computed: {
     isButtonDisabled() {
-      if (this.emailSet.ready === true && this.passwordSet.ready === true && this.nameSet.value.length > 1 && this.agreements === true)
+      if (
+        this.emailSet.ready === true &&
+        this.passwordSet.ready === true &&
+        this.nameSet.value.length > 1 &&
+        this.agreements === true
+      )
         return false;
       return true;
     },

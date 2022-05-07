@@ -1,12 +1,12 @@
 export default {
-      /*global M*/
+  /*global M*/
   install: (app, options) => {
     app.config.globalProperties.$message = (html) => {
-        M.toast({ html });
+      M.toast({ html});
     };
     app.config.globalProperties.$error = (html) => {
-        M.toast({html: `[Ошибка]: ${html}`});
-      };
-      console.log(options, app.config.globalProperties)
+      M.toast({ html: `[Ошибка]: ${html}`});
+    };
+    console.log(options, app.config.globalProperties);
   },
 };

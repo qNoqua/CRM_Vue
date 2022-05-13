@@ -1,13 +1,18 @@
 <template>
   <nav class="navbar orange lighten-1">
     <div class="nav-wrapper">
-      <div class="navbar-left" >
-        <a href="#" >
-          <i class="material-icons black-text" v-on:click.prevent="toggleSidebar">dehaze</i>
-        </a>
-        <span class="black-text" >Дата: {{ currrentDate.day }}.{{ currrentDate.month }}.{{ currrentDate.year }}  Время: {{ currrentDate.hours }}:{{ currrentDate.minutes }}</span>
+      <div class="navbar-left">
+        <div>
+          <a href="#">
+            <i
+              class="material-icons black-text"
+              v-on:click.prevent="toggleSidebar"
+              >dehaze</i
+            >
+          </a>
+        </div>
+        <date/>
       </div>
-
       <ul class="right hide-on-small-and-down">
         <li>
           <a
@@ -16,7 +21,8 @@
             data-target="dropdown"
             ref="dropdown"
           >
-            USER NAME
+            <span v-if="user">{{ user.name }}</span>
+            <span v-else>...</span>
             <i class="material-icons right">arrow_drop_down</i>
           </a>
 
@@ -28,7 +34,7 @@
             </li>
             <li class="divider" tabindex="-1"></li>
             <li v-on:click.prevent="logout">
-              <a href="#" class="black-text" >
+              <a href="#" class="black-text">
                 <i class="material-icons">assignment_return</i>Выйти
               </a>
             </li>
@@ -39,59 +45,45 @@
   </nav>
 </template>
 <script>
+
+import  Date  from '@/components/app/date/Date'
 export default {
   /*global M*/
-  data () {
+  components: {
+    Date
+  },
+  data() {
     return {
-      currrentDate: this.timeCounter(),
-      interval: null,
       dropdown: null,
-    } 
+    };
   },
   methods: {
     toggleSidebar() {
-      this.$emit('clickBurger')
+      this.$emit("clickBurger");
     },
     logout() {
-      localStorage.setItem('isAuthorized', false)
-      this.$router.push('/login?message=logout')
+      this.$store.dispatch('logout')
     },
-    timeCounter() {
-      const date = new Date;
-      let year = String(date.getFullYear());
-      let month = String(date.getMonth() + 1);
-      let day = String(date.getDate());
-      let min = String(date.getMinutes());
-      let hour = String(date.getHours());
-      let sec = String(date.getSeconds());
-      if (month <= 9) month = '0' + month
-      if (day <= 9) day = '0' + day
-      if (min <= 9) min = '0' + min
-      if (hour <= 9) hour = '0' + hour
-      return {
-        year: year,
-        month: month,
-        day: day,
-        hours: hour,
-        minutes: min,
-        sec: sec
-      }
-    }
+  },
+  beforeMount() {
+    this.$store.dispatch('requestUser')
   },
   mounted() {
     this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-      constrainWidth: true
+      constrainWidth: true,
     });
-    this.interval = setInterval(() => {
-      this.currrentDate = this.timeCounter()  
-    }, 1000);
-    
+
   },
   beforeUnmount() {
     clearInterval(this.interval);
     if (this.dropdown && this.dropdown.destroy) {
-      this.dropdown.destroy()
-    } 
-  }
-}
+      this.dropdown.destroy();
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.userModule.user;
+    },
+  },
+};
 </script>

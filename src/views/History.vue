@@ -30,7 +30,7 @@
             <span class="white-text badge red">Расход</span>
           </td>
           <td>
-            <button class="btn-small btn">
+            <button class="btn-small btn" v-on:click="a">
               <i class="material-icons">open_in_new</i>
             </button>
           </td>
@@ -39,3 +39,19 @@
     </table>
   </section>
 </template>
+
+
+<script>
+export default {
+    data() {
+      return {
+        history: this.$store.getters.history
+      }
+    },
+    methods: {
+      a () {
+        console.log(this.$store.getters)
+      }
+    }
+}
+</script>

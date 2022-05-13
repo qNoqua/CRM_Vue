@@ -69,7 +69,7 @@
           class="btn waves-effect waves-light auth-submit"
           type="submit"
           v-bind:disabled="isButtonDisabled"
-          v-on:click.prevent="singUp"
+          v-on:click.prevent="signUp"
         >
           Зарегистрироваться
           <i class="material-icons right">send</i>
@@ -118,29 +118,12 @@ export default {
     }
   },
   methods: {
-    async singUp() {
-      try {
-        const response = await fetch("http://localhost:7007/auth/", {
-        method: "POST",
-        headers: {
-          Accept: "application/json, application/xml, text/plain, text/html, .",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: this.emailSet.value,
-          password: this.passwordSet.value,
-          name: this.nameSet.value,
-        }),
-        
+    async signUp() {
+      this.$store.dispatch("signUp", {
+        email: this.emailSet.value,
+        password: this.passwordSet.value,
+        name: this.nameSet.value,
       });
-      if (response.status === 201)  {
-      localStorage.setItem('isAuthorized', true)
-      this.$router.push('/')
-    }
-    }
-    catch(error) {
-     console.error(error)   
-    }
     },
   },
   computed: {

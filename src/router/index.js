@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store';
 
 const routes = [
   {
@@ -63,15 +64,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthorized = JSON.parse(localStorage.getItem('isAuthorized'))
+  const isAuthorized = store.getters.isAuthorized
   if (to.meta.onlyAuth && !isAuthorized) {
       next({
           path: '/login',
-          // query: { redirect: to.fullPath }
       })
+  } else if (isAuthorized && !to.meta.onlyAuth) {
+      next({
+        path: '/',
+    })
   } else {
       next()
-  }
+}
 });
 
 

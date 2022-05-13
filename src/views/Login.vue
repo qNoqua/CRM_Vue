@@ -13,8 +13,13 @@
           v-model.trim="emailSet.value"
         />
         <label for="email">Email</label>
-        <small v-if="emailSet.value.length === 0" class="helper-text validate"></small>
-        <small v-else-if="emailSet.ready === false" class="helper-text invalid"><ErrorMessage name="email"/></small>
+        <small
+          v-if="emailSet.value.length === 0"
+          class="helper-text validate"
+        ></small>
+        <small v-else-if="emailSet.ready === false" class="helper-text invalid"
+          ><ErrorMessage name="email"
+        /></small>
       </div>
 
       <div class="input-field password">
@@ -27,13 +32,18 @@
           v-model.trim="passwordSet.value"
         />
         <label for="password">Пароль</label>
-        <button class="btn waves-effect waves-light" v-on:click.prevent="typePassword">
+        <button
+          class="btn waves-effect waves-light"
+          v-on:click.prevent="typePassword"
+        >
           Показать
         </button>
         <small v-if="passwordSet.value.length === 0"></small>
         <small
           v-else-if="passwordSet.ready === false"
-          class="helper-text invalid"><ErrorMessage name="password"/></small>
+          class="helper-text invalid"
+          ><ErrorMessage name="password"
+        /></small>
       </div>
     </div>
     <div class="card-action">
@@ -42,7 +52,7 @@
           v-bind:disabled="isButtonDisabled"
           class="btn waves-effect waves-light auth-submit"
           type="submit"
-          v-on:click.prevent="singIn"
+          v-on:click.prevent="signIn"
         >
           Войти
           <i class="material-icons right">send</i>
@@ -59,8 +69,8 @@
 
 <script>
 import { Field, Form, ErrorMessage } from "vee-validate";
-import messages from '@/utils/messages';
-import ValidateMethods from '@/mixins/validateMethods'
+import messages from "@/utils/messages";
+import ValidateMethods from "@/mixins/validateMethods";
 
 export default {
   name: "login",
@@ -83,43 +93,18 @@ export default {
     Form,
     ErrorMessage,
   },
-    mounted () {
+  mounted() {
     if (messages[this.$route.query.message]) {
-      this.$message(messages[this.$route.query.message])
-    } 
+      this.$message(messages[this.$route.query.message]);
+    }
   },
   methods: {
-    onSubmit() {
-      const formData = {
+    async signIn() {
+      this.$store.dispatch("signIn", {
         email: this.emailSet.value,
         password: this.passwordSet.value,
-      };
-      this.$router.push("/");
-      console.log(formData);
-    },
-    async singIn() {
-      try {
-        const response = await fetch("http://localhost:7007/auth/", {
-        method: "POST",
-        headers: {
-          Accept: "application/json, application/xml, text/plain, text/html, .",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: this.emailSet.value,
-          password: this.passwordSet.value,
-        }),
-        
       });
-      if (response.status === 201)  {
-      localStorage.setItem('isAuthorized', true)
-      this.$router.push('/')
-    }
-    }
-    catch(error) {
-     console.error(error)   
-    }
-    } 
+    },
   },
   computed: {
     isButtonDisabled() {

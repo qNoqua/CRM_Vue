@@ -28,7 +28,8 @@ export const actions = {
   },
   async logout(context) {
     context.commit("logout", false);
-    localStorage.setItem('isAuthorized', false)
+    localStorage.setItem('isAuthorized', false);
+    localStorage.removeItem('user');
     router.push("/login?message=logout");
   },
 };

@@ -69,9 +69,9 @@ export default {
     this.$store.dispatch('requestUser')
   },
   mounted() {
-    this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
-      constrainWidth: true,
-    });
+      this.dropdown = M.Dropdown.init(this.$refs.dropdown, {
+        constrainWidth: true,
+      });
 
   },
   beforeUnmount() {

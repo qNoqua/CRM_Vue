@@ -5,7 +5,4 @@ export const getters = {
     user (state) {
         return state.user
     },
-    history (state) {
-        return state.history
-    }
 }

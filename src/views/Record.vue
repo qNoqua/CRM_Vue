@@ -71,6 +71,7 @@ import * as dayjs from "dayjs";
 export default {
   data() {
     return {
+      newCheck: {},
       typeOfCheck: "",
       sumOfCheck: "",
       description: "",
@@ -86,7 +87,11 @@ export default {
         sumOfCheck: this.sumOfCheck,
         description: this.description,
       };
-      console.log(newCheck);
+      console.log(this.$store.getters.history)
+      console.log(newCheck);  
+      this.$store.commit('pushToHistory', newCheck)
+      console.log(this.$store.getters.history)
+      this.$router.push("/history");
     },
   },
   computed: {

@@ -2,18 +2,16 @@
   <div class="page-title">
     <h3>История записей</h3>
   </div>
-
-  <div class="history-chart">
+  <!-- <div class="history-chart">
     <canvas></canvas>
-  </div>
-
+  </div> -->
   <section>
     <table>
       <thead>
         <tr>
           <th>#</th>
           <th>Сумма</th>
-          <th>Дата</th>
+          <th>Дата и время</th>
           <th>Категория</th>
           <th>Тип</th>
           <th>Открыть</th>
@@ -21,16 +19,17 @@
       </thead>
 
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>1212</td>
-          <td>12.12.32</td>
-          <td>name</td>
+        <tr v-for="(item, index) in history" v-bind:key="item.id">
+          <td> {{index + 1}} </td>
+          <td> {{item.sumOfCheck}}</td>
+          <td> {{item.date}} : {{item.time}} </td>
+          <td> {{item.description }} </td>
           <td>
-            <span class="white-text badge red">Расход</span>
+            <span v-if="item.typeOfCheck === 'outcome'" class="white-text badge red">Расход</span>
+            <span v-else class="white-text badge green">Доход</span>
           </td>
           <td>
-            <button class="btn-small btn" v-on:click="a">
+            <button class="btn-small btn">
               <i class="material-icons">open_in_new</i>
             </button>
           </td>
@@ -45,13 +44,14 @@
 export default {
     data() {
       return {
-        history: this.$store.getters.history
+        history: []
       }
     },
     methods: {
-      a () {
-        console.log(this.$store.getters)
-      }
+    },
+    mounted() {
+      this.history = this.$store.getters.history
     }
+    
 }
 </script>

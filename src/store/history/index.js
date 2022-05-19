@@ -2,10 +2,9 @@ import { actions } from "./actions";
 import { mutations } from "./mutations";
 import { getters } from "./getters";
 
-export const userModule = {
+export const historyModule = {
   state: {
-    isAuthorized: JSON.parse(localStorage.getItem("isAuthorized")),
-    user: JSON.parse(localStorage.getItem("user")),
+    history: [],
   },
   getters: getters,
   mutations: mutations, 

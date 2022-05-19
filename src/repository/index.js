@@ -1,7 +1,6 @@
 const user = {
   name: "admin",
   balance: 100,
-  date: '',
 };
 
 export async function signIn(email, password) {
@@ -49,13 +48,9 @@ export async function signUp() {
   }
 }
 
-// export async function logout() {
-//   await console.log('logout')
-//   return false
-// }
-
 export async function requestUser() {
   try {
+    localStorage.setItem("user", JSON.stringify(user))
     return user;
     // const response = await fetch("http://localhost:7007/user/", {
     //     method: "GET"

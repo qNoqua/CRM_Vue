@@ -68,9 +68,10 @@ export default {
   methods: {
     editCategory() {
       console.log([this.$refs.select.value]);
-      this.$store.commit("editNameCategory", {
+      this.$store.commit("editCategory", {
         id: this.$refs.select.value,
-        value: this.newName,
+        nameCategory: this.newName,
+        limit: this.newLimit
       });
     },
   },

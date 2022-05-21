@@ -22,7 +22,22 @@ export const mutations = {
             return item
         })
     },
-    editLimitCategory(state, item, newLimit) {
-        state.categories.item.limit = newLimit
+    editCategory(state, payload) {
+
+            let localCategory = JSON.parse(localStorage.getItem('localCategories')) || []
+            console.log(localCategory)
+            console.log(payload)
+            // Object.assign(localCategory.find((item) => {
+            //     Number(item.id) === Number(payload.id)}), payload)
+            const item = localCategory.find(item => Number(item.id) === Number(payload.id))
+            const index = localCategory.indexOf(item)
+            console.log(item)
+            localCategory[index] = {...item, ...payload}
+            state.categories = localCategory
+            localStorage.setItem('localCategories', JSON.stringify(state.categories))
+
+        if (payload.newLimit) {
+            localStorage.setItem('localCategories', JSON.stringify(state.categories))
+        }
     }
 }

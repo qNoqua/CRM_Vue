@@ -74,7 +74,9 @@ export default {
         this.$store.commit("pushToCategories", newLimit);
         this.createMessage = 'Категория создана'
         this.limitMessage = ''
+        this.$router.push('/planning')  
       }
+      
     },
   },
   computed: {

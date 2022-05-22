@@ -5,9 +5,9 @@
               </div>
 
               <section>
-                <div>
+                <div v-for="category of categories" v-bind:key="category.id">
                   <p>
-                    <strong>Девушка:</strong>
+                    <strong>{{ category.nameCategory }}</strong>
                     12 122 из 14 0000
                   </p>
                   <div class="progress">
@@ -16,3 +16,14 @@
                 </div>
               </section>
 </template>
+<script>
+export default {
+    computed: {
+      categories() {
+        return this.$store.getters.categories
+      },
+      
+    }
+
+}
+</script>

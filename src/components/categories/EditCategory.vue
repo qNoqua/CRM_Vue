@@ -21,9 +21,7 @@
 
         <div class="input-field">
           <input type="text" id="nameEdit" v-model="newName" />
-          <label for="nameEdit"
-            >Название</label
-          >
+          <label for="nameEdit">Название</label>
           <span class="helper-text validate">Введите новое название</span>
         </div>
         <div class="input-field">
@@ -39,16 +37,25 @@
             >Задайте, чтобы обновить лимит</span
           >
         </div>
-
-        <button
-          class="btn waves-effect waves-light"
-          v-bind:disabled="isButtonDisabled"
-          type="submit"
-          v-on:click.prevent="editCategory"
-        >
-          Обновить
-          <i class="material-icons right">send</i>
-        </button>
+        <div class="button-field">
+          <button
+            class="btn waves-effect waves-light"
+            v-bind:disabled="isButtonDisabled"
+            type="submit"
+            v-on:click.prevent="editCategory"
+          >
+            Обновить
+            <i class="material-icons right">send</i>
+          </button>
+          <button
+            class="btn waves-effect waves-light"
+            type="submit"
+            v-on:click="removeCategory"
+          >
+            Удалить
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -67,11 +74,17 @@ export default {
   },
   methods: {
     editCategory() {
-      console.log([this.$refs.select.value]);
       this.$store.commit("editCategory", {
-        id: this.$refs.select.value,
+        id: Number(this.$refs.select.value),
         nameCategory: this.newName,
-        limit: this.newLimit
+        limit: this.newLimit,
+      });
+    },
+    removeCategory() {
+      this.$store.commit("removeCategory", {
+        id: Number(this.$refs.select.value),
+        nameCategory: this.newName,
+        limit: this.newLimit,
       });
     },
   },
@@ -79,11 +92,6 @@ export default {
     isButtonDisabled() {
       if (this.newName !== "" || this.newLimit > 0) return false;
       return true;
-    },
-  },
-  watch: {
-    selectedCategoryId(value) {
-      console.log(value);
     },
   },
   created() {
@@ -94,16 +102,6 @@ export default {
   },
   mounted() {
     this.select = M.FormSelect.init(this.$refs.select);
-    // this.$store.subscribe((mutation) =>{
-    //     console.log(mutation)
-    //     if(mutation.type === 'editNameCategory') {
-    //         setTimeout(() => {
-    //             this.selectedCategory = mutation.payload.value
-    //             console.log(this.$refs.select.value ,mutation.payload.value)
-    //             this.$refs.select.dispatchEvent(new Event('change'))
-    //         }, 0);
-    //     }
-    // })
   },
   beforeUnmount() {
     if (this.select && this.select.destroy) {

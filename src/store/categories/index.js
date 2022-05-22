@@ -4,8 +4,8 @@ import { getters } from "./getters";
 
 export const categoriesModule = {
   state: {
-    // categories: [{id: Date.now(), nameCategory: 'Машина', limit: '1000000'}],
-    categories: JSON.parse(localStorage.getItem('localCategories')) || [],
+    categories: JSON.parse(localStorage.getItem('localCategories')) || {},
+    ids: JSON.parse(localStorage.getItem('localCategoriesIds')) || [],
   },
   getters: getters,
   mutations: mutations, 

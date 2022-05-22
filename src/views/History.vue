@@ -19,11 +19,11 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in history" v-bind:key="item.id">
+        <tr v-for="(item, index) in getHistoryByCategoryId" v-bind:key="item.id">
           <td> {{index + 1}} </td>
           <td> {{item.sumOfCheck}}</td>
           <td> {{item.date}} : {{item.time}} </td>
-          <td> {{item.description }} </td>
+          <td> {{item.nameParentCategory }} </td>
           <td>
             <span v-if="item.typeOfCheck === 'outcome'" class="white-text badge red">Расход</span>
             <span v-else class="white-text badge green">Доход</span>
@@ -44,13 +44,14 @@
 export default {
     data() {
       return {
-        history: []
       }
     },
     methods: {
     },
-    mounted() {
-      this.history = this.$store.getters.history
+    computed: {
+      getHistoryByCategoryId() {
+        return this.$store.getters.getHistoryByCategoryId(null)
+      },
     }
     
 }

@@ -4,7 +4,8 @@ import { getters } from "./getters";
 
 export const historyModule = {
   state: {
-    history: [],
+    history: JSON.parse(localStorage.getItem('localHistory')) || {},
+    historyIds: JSON.parse(localStorage.getItem('localHistoryIds')) || [],
   },
   getters: getters,
   mutations: mutations, 

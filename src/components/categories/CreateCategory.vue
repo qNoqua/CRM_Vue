@@ -67,6 +67,7 @@ export default {
         id: Date.now(),
         nameCategory: this.nameCategory[0].toUpperCase() + this.nameCategory.slice(1),
         limit: this.limit,
+        spent: 0,
       };
       if (this.$store.getters.categories.some((el) => el.nameCategory.toLowerCase() === this.nameCategory.toLowerCase())) {
         this.createMessage = 'Такая категория уже существует'

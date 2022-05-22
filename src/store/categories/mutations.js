@@ -1,43 +1,27 @@
-
 export const mutations = {
-    pushToCategories(state, item){
-        state.categories.push(item);
-        localStorage.setItem('localCategories', JSON.stringify(state.categories))
-    },
-    editNameCategory(state, payload) {
-        console.log(payload)
-        // state.categories.forEach((item) => {
-        //     if (item.id === Number(payload.id)) {
-               
-        //         // Vue.set(state.categories[index], 'nameCategory', payload.value)
-        //         // item.nameCategory = payload.value;
-        //         item = {...item, nameCategory:payload.value}
-        //     }
-        // });
-        state.categories = state.categories.map(item => {
-            console.log(item.id === Number(payload.id))
-            if (item.id === Number(payload.id)) {
-               return {...item, nameCategory:payload.value}
-            } 
-            return item
-        })
+    pushToCategories(state, payload) {
+        state.categories[payload.id] = payload;
+        state.ids.push(payload.id);
+        updateLocalStorage(state.categories, state.ids)
     },
     editCategory(state, payload) {
-
-            let localCategory = JSON.parse(localStorage.getItem('localCategories')) || []
-            console.log(localCategory)
-            console.log(payload)
-            // Object.assign(localCategory.find((item) => {
-            //     Number(item.id) === Number(payload.id)}), payload)
-            const item = localCategory.find(item => Number(item.id) === Number(payload.id))
-            const index = localCategory.indexOf(item)
-            console.log(item)
-            localCategory[index] = {...item, ...payload}
-            state.categories = localCategory
-            localStorage.setItem('localCategories', JSON.stringify(state.categories))
-
-        if (payload.newLimit) {
-            localStorage.setItem('localCategories', JSON.stringify(state.categories))
-        }
+        const oldCategory = state.categories[payload.id];
+        state.categories[payload.id] = {...oldCategory, ...payload};
+        updateLocalStorage(state.categories, state.ids)
+    },
+    removeCategory(state, payload) {
+        state.ids = state.ids.filter((id) => Number(payload.id) !== id);
+        const keys = Object.keys(state.categories)
+        const newCategories = {}
+        keys.forEach((key) => {
+            if (state.ids.includes(Number(key)))
+            newCategories[key] = state.categories[key]
+        })
+        state.categories = newCategories;
+        updateLocalStorage(state.categories, state.ids)
     }
+}
+const updateLocalStorage = (categories, ids) => {
+    localStorage.setItem('localCategories', JSON.stringify(categories))
+    localStorage.setItem('localCategoriesIds', JSON.stringify(ids))
 }

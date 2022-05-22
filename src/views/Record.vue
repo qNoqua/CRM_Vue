@@ -3,11 +3,17 @@
     <h3>Новая запись</h3>
   </div>
   <form class="form">
-    <label>Выберите категорию</label>
     <div class="input-field">
-      <select required>
-        <option>name cat</option>
+      <select ref="select" v-model="selectedCategoryId">
+        <option
+          v-for="category in categories"
+          v-bind:key="category.id"
+          v-bind:value="category.id"
+        >
+          {{ category.nameCategory }}
+        </option>
       </select>
+      <label>Выберите категорию</label>
     </div>
     <p>
       <label>
@@ -49,9 +55,7 @@
     <div class="input-field">
       <input id="description" type="text" v-model="description" />
       <label for="description">Описание</label>
-      <span  class="helper-text validate"
-        >Добавьте описание расхода</span
-      >
+      <span class="helper-text validate">Добавьте описание расхода</span>
     </div>
 
     <button
@@ -69,12 +73,15 @@
 <script>
 import * as dayjs from "dayjs";
 export default {
+  /*global M*/
   data() {
     return {
       newCheck: {},
       typeOfCheck: "",
       sumOfCheck: "",
       description: "",
+      select: null,
+      selectedCategoryId: null,
     };
   },
   methods: {
@@ -86,19 +93,40 @@ export default {
         typeOfCheck: this.typeOfCheck,
         sumOfCheck: this.sumOfCheck,
         description: this.description,
+        categoryId: Number(this.$refs.select.value),
+        nameParentCategory: this.getCategoriesName[0].nameCategory,
       };
-      console.log(this.$store.getters.history)
-      console.log(newCheck);  
-      this.$store.commit('pushToHistory', newCheck)
-      console.log(this.$store.getters.history)
+      console.log(this.select);
+      console.log(newCheck);
+      this.$store.commit("pushToHistory", newCheck);
       this.$router.push("/history");
     },
   },
   computed: {
     isButtonDisabled() {
-      if (this.typeOfCheck !== "" && this.sumOfCheck !== "" && this.description !== "") return false;
+      if (
+        this.typeOfCheck !== "" &&
+        this.sumOfCheck !== "" &&
+        this.description !== "" &&
+        this.select !== null
+      )
+        return false;
       return true;
     },
+    categories() {
+      return this.$store.getters.categories;
+    },
+    getCategoriesName() {
+      return this.$store.getters.getCategoriesName(Number(this.selectedCategoryId))
+    }
+  },
+  mounted() {
+    this.select = M.FormSelect.init(this.$refs.select);
+  },
+  beforeUnmount() {
+    if (this.select && this.select.destroy) {
+      this.select.destroy();
+    }
   },
 };
 </script>

@@ -187,6 +187,10 @@ export default {
     display: grid;
     grid-template-columns: 3fr 1fr;
 }
+.button-field {
+    display: flex;
+    justify-content: space-between;
+}
 
 </style>
 

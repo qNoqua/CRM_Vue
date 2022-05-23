@@ -39,7 +39,7 @@
         </div>
         <div class="button-field">
           <button
-            class="btn waves-effect waves-light"
+            class="btn-small waves-effect waves-light"
             v-bind:disabled="isButtonDisabled"
             type="submit"
             v-on:click.prevent="editCategory"
@@ -48,7 +48,7 @@
             <i class="material-icons right">send</i>
           </button>
           <button
-            class="btn waves-effect waves-light"
+            class="btn-small waves-effect waves-light"
             type="submit"
             v-on:click="removeCategory"
           >

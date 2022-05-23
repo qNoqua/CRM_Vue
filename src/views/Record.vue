@@ -59,7 +59,7 @@
     </div>
 
     <button
-      class="btn waves-effect waves-light"
+      class="btn-small waves-effect waves-light"
       type="submit"
       v-on:click.prevent="createCheck"
       v-bind:disabled="isButtonDisabled"
@@ -94,12 +94,20 @@ export default {
         sumOfCheck: this.sumOfCheck,
         description: this.description,
         categoryId: Number(this.$refs.select.value),
-        nameParentCategory: this.getCategoriesName[0].nameCategory,
+        nameParentCategory: this.getCategoriesById[0].nameCategory,
       };
       console.log(this.select);
       console.log(newCheck);
+      this.balanceOfCategoryChanger();
       this.$store.commit("pushToHistory", newCheck);
       this.$router.push("/history");
+    },
+    balanceOfCategoryChanger() {
+      this.$store.commit("balanceOfCategoryChanger", {
+        categoryId: this.selectedCategoryId,
+        typeOfCheck: this.typeOfCheck,
+        sumOfCheck: this.sumOfCheck,
+      });
     },
   },
   computed: {
@@ -116,9 +124,11 @@ export default {
     categories() {
       return this.$store.getters.categories;
     },
-    getCategoriesName() {
-      return this.$store.getters.getCategoriesName(Number(this.selectedCategoryId))
-    }
+    getCategoriesById() {
+      return this.$store.getters.getCategoriesById(
+        Number(this.selectedCategoryId)
+      );
+    },
   },
   mounted() {
     this.select = M.FormSelect.init(this.$refs.select);

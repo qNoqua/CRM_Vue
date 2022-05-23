@@ -19,6 +19,19 @@ export const mutations = {
         })
         state.categories = newCategories;
         updateLocalStorage(state.categories, state.ids)
+    },
+    balanceOfCategoryChanger(state, payload) {
+        const oldCategory = state.categories[payload.categoryId];
+        if (payload.typeOfCheck === 'outcome') {
+            oldCategory.spent -= payload.sumOfCheck
+            console.log(oldCategory)
+        }
+        if (payload.typeOfCheck === 'income') {
+            oldCategory.spent += payload.sumOfCheck
+            console.log(oldCategory)
+        }
+        state.categories[payload.id] = {...oldCategory, ...payload};
+        updateLocalStorage(state.categories, state.ids)
     }
 }
 const updateLocalStorage = (categories, ids) => {

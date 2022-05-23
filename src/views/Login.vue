@@ -33,7 +33,7 @@
         />
         <label for="password">Пароль</label>
         <button
-          class="btn waves-effect waves-light"
+          class="btn-small waves-effect waves-light"
           v-on:click.prevent="typePassword"
         >
           Показать
@@ -50,7 +50,7 @@
       <div>
         <button
           v-bind:disabled="isButtonDisabled"
-          class="btn waves-effect waves-light auth-submit"
+          class="btn-small waves-effect waves-light auth-submit"
           type="submit"
           v-on:click.prevent="signIn"
         >

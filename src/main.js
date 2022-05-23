@@ -4,8 +4,9 @@ import router from './router'
 import store from './store'
 import messagePlugin from './utils/message.plugin'
 import 'materialize-css/dist/js/materialize.min.js'
+import tooltip from '@/directives/tooltip.directive'
 
-createApp(App).use(router).use(store).use(messagePlugin).mount('#app')
+createApp(App).use(router).use(store).use(messagePlugin).directive('tooltip', tooltip).mount('#app')
 
 
 

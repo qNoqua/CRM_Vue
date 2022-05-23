@@ -10,7 +10,7 @@
       <span class="helper-text invalid">name</span>
     </div>
 
-    <button class="btn waves-effect waves-light" type="submit">
+    <button class="btn-small waves-effect waves-light" type="submit">
       Обновить
       <i class="material-icons right">send</i>
     </button>

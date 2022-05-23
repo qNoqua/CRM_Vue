@@ -39,7 +39,7 @@
         </div>
 
         <button
-          class="btn waves-effect waves-light"
+          class="btn-small waves-effect waves-light"
           type="submit"
           v-bind:disabled="isButtonDisabled"
           v-on:click.prevent="createLimit"
@@ -68,6 +68,7 @@ export default {
         nameCategory: this.nameCategory[0].toUpperCase() + this.nameCategory.slice(1),
         limit: this.limit,
         spent: 0,
+        supportingMessage: '',
       };
       if (this.$store.getters.categories.some((el) => el.nameCategory.toLowerCase() === this.nameCategory.toLowerCase())) {
         this.createMessage = 'Такая категория уже существует'

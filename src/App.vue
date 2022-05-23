@@ -189,6 +189,7 @@ export default {
 }
 .button-field {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
 }
 

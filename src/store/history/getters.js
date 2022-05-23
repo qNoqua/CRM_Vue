@@ -3,10 +3,12 @@ export const getters = {
         return state.history
     },
     getHistoryByCategoryId(state) {
-        return (id) => {
+        return (search) => {
             const items = state.historyIds.map(key => state.history[key])
-            if (id)  {
-                return items.filter(item => item.categoryId === id)
+            if (search)  {
+                return items.filter(item => Object.values(item).some(element => {
+                    return String(element).includes(String(search))
+                }))
             }
             return items
         }

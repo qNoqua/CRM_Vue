@@ -1,7 +1,6 @@
 <template>
     <div class="page-title">
                 <h3>Планирование</h3>
-                <h4>12 212</h4>
               </div>
 
               <section>

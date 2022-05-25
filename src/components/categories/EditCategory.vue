@@ -42,7 +42,7 @@
             class="btn-small waves-effect waves-light"
             v-bind:disabled="isButtonDisabled"
             type="submit"
-            v-on:click.prevent="editCategory"
+            v-on:click="editCategory"
           >
             Обновить
             <i class="material-icons right">send</i>

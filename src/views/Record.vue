@@ -86,6 +86,7 @@ export default {
   },
   methods: {
     createCheck() {
+      if (this.negativeBalance()) return;
       const newCheck = {
         id: Date.now(),
         date: dayjs().format("DD.MM.YYYY"),
@@ -96,20 +97,32 @@ export default {
         categoryId: Number(this.$refs.select.value),
         nameParentCategory: this.getCategoriesById[0].nameCategory,
       };
-      console.log(this.select);
-      console.log(newCheck);
-      this.balanceOfCategoryChanger();
+      this.categoryOfBalanceChanger();
+      this.updateUserBalance();
       this.$store.commit("pushToHistory", newCheck);
       this.$router.push("/history");
     },
-    balanceOfCategoryChanger() {
-      this.$store.commit("balanceOfCategoryChanger", {
+    updateUserBalance() {
+      this.$store.commit("updateUserBalance", {
+        sumOfCheck: this.sumOfCheck,
+        typeOfCheck: this.typeOfCheck,
+      });
+    },
+    categoryOfBalanceChanger() {
+      this.$store.commit("categoryOfBalanceChanger", {
         categoryId: this.selectedCategoryId,
         typeOfCheck: this.typeOfCheck,
         sumOfCheck: this.sumOfCheck,
       });
     },
+    negativeBalance() {
+      if (this.typeOfCheck === 'outcome' && this.getUserBalance < this.sumOfCheck) {
+        M.toast({html: 'Недостаточно сведств! Проверьте баланс'})
+        return true;
+      }
+      return false
   },
+},
   computed: {
     isButtonDisabled() {
       if (
@@ -129,6 +142,10 @@ export default {
         Number(this.selectedCategoryId)
       );
     },
+    getUserBalance() {
+      console.log(this.$store.getters.user.balance)
+      return this.$store.getters.user.balance
+    }
   },
   mounted() {
     this.select = M.FormSelect.init(this.$refs.select);

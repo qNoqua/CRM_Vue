@@ -32,4 +32,4 @@ export const actions = {
     localStorage.removeItem('user');
     router.push("/login?message=logout");
   },
-};
+}

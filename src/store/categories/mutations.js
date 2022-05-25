@@ -6,7 +6,11 @@ export const mutations = {
     },
     editCategory(state, payload) {
         const oldCategory = state.categories[payload.id];
-        state.categories[payload.id] = {...oldCategory, ...payload};
+        let newCategoriesName = {id: payload.id};
+        let newCategoriesLimit = {id: payload.id};
+        if (payload.nameCategory !== '') newCategoriesName.nameCategory = payload.nameCategory
+        if (payload.limit !== '') newCategoriesLimit.limit = payload.limit
+        state.categories[payload.id] = {...oldCategory, ...newCategoriesName, ...newCategoriesLimit};
         updateLocalStorage(state.categories, state.ids)
     },
     removeCategory(state, payload) {
@@ -20,7 +24,7 @@ export const mutations = {
         state.categories = newCategories;
         updateLocalStorage(state.categories, state.ids)
     },
-    balanceOfCategoryChanger(state, payload) {
+    categoryOfBalanceChanger(state, payload) {
         const oldCategory = state.categories[payload.categoryId];
         if (payload.typeOfCheck === 'outcome') {
             oldCategory.spent -= payload.sumOfCheck

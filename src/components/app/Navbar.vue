@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.userModule.user;
+      return this.$store.getters.user;
     },
   },
 };

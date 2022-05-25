@@ -7,7 +7,7 @@ export const getters = {
             const items = state.historyIds.map(key => state.history[key])
             if (search)  {
                 return items.filter(item => Object.values(item).some(element => {
-                    return String(element).includes(String(search))
+                    return String(element).toLocaleLowerCase().includes(String(search).toLowerCase())
                 }))
             }
             return items

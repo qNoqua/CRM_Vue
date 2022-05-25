@@ -1,4 +1,4 @@
-const user = {
+const user = JSON.parse(localStorage.getItem("user")) || {
   name: "admin",
   balance: 100,
 };
@@ -44,13 +44,12 @@ export async function signUp() {
     }
   } catch (error) {
     console.error(error);
-    
   }
 }
 
 export async function requestUser() {
   try {
-    localStorage.setItem("user", JSON.stringify(user))
+    localStorage.setItem("user", JSON.stringify(user));
     return user;
     // const response = await fetch("http://localhost:7007/user/", {
     //     method: "GET"
